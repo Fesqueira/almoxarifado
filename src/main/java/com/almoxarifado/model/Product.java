@@ -21,7 +21,7 @@ public class Product {
             BigDecimal sellingPrice,
             int quantity,
             int minimumStock
-    ){
+    ) {
         this.id = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
 
@@ -33,8 +33,8 @@ public class Product {
         this.minimumStock = minimumStock;
     }
 
-    public void addStock(int amount){
-        if (amount <= 0){
+    public void addStock(int amount) {
+        if (amount <= 0) {
             throw new IllegalArgumentException(
                     "Você não pode adicionar números negativos."
             );
@@ -42,13 +42,13 @@ public class Product {
         this.quantity += amount;
     }
 
-    public void removeStock(int amount){
-        if (amount <= 0){
+    public void removeStock(int amount) {
+        if (amount <= 0) {
             throw new IllegalArgumentException(
                     "Você não pode subtrair números negativos!"
             );
         }
-        if (amount > this.quantity){
+        if (amount > this.quantity) {
             throw new IllegalStateException(
                     "Não é possível remover " + amount + " unidades. Apenas " + this.quantity + " disponiveis."
             );
