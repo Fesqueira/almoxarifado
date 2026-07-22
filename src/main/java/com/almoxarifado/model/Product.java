@@ -1,4 +1,4 @@
-package com.almoxarifado.model;
+package almoxarifado.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.math.BigDecimal;
@@ -33,6 +33,7 @@ public class Product {
         this.minimumStock = minimumStock;
     }
 
+
     public void addStock(int amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException(
@@ -56,4 +57,7 @@ public class Product {
         this.quantity -= amount;
     }
 
+    public Object getName(Product product) {
+        return product.name;
+    }
 }

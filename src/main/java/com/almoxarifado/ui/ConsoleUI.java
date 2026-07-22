@@ -1,7 +1,12 @@
 package almoxarifado.ui;
 
+import java.math.BigDecimal;
+import java.sql.SQLOutput;
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import service.ProductService;
+
+import almoxarifado.model.Product;
+import almoxarifado.service.ProductService;
 
 public class ConsoleUI {
     private final Scanner scanner;
@@ -20,7 +25,7 @@ public class ConsoleUI {
             int option = readOption();
             switch (option){
                 case 1:
-                    this.executeOption(option);
+                    this.registrationScreen();
                     break;
                 case 0:
                     running = false;
@@ -40,11 +45,51 @@ public class ConsoleUI {
 
     public int readOption(){
         String input = scanner.nextLine();
-        int option = Integer.parseInt(input);
-        return option;
+        return Integer.parseInt(input);
     }
 
-    public void executeOption (int option){
+    public void registrationScreen(){
+        String name;
+        String description;
+        BigDecimal purchasePrice = BigDecimal.valueOf(0);
+        BigDecimal sellingPrice = BigDecimal.valueOf(0);
+        int quantity = 0;
+        int minimumSet = 0;
+        boolean i = true;
+
+
+        System.out.println("Nome do Produto: ");
+        name = scanner.nextLine();
+        System.out.println("Descrição do Produto: ");
+        description = scanner.nextLine();
+        System.out.println("Preço pago pelo produto (Apenas números): ");
+        try {
+            purchasePrice = new BigDecimal(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Por favor, insira números válidos.");
+        }
+        System.out.println("Preço cobrado pelo produto (Apenas números): ");
+        try {
+            sellingPrice = new BigDecimal(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Por favor, insira números válidos.");
+        }
+        System.out.println("Quantas unidades: ");
+        try {
+            quantity = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Por favor, insira números inteiros válidos.");
+        }
+        System.out.println("Qual a quantidade mínima de estoque deste produto: : ");
+        try {
+            minimumSet = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Por favor, insira números inteiros válidos.");
+        }
+
+        productService.registerProduct(name, description, purchasePrice, sellingPrice, quantity, minimumSet);
+
+
 
     }
 }
