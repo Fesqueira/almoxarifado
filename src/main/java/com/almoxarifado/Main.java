@@ -1,7 +1,7 @@
-package almoxarifado;
+package com.almoxarifado;
 
 
-import almoxarifado.ui.ConsoleUI;
+import com.almoxarifado.ui.ConsoleUI;
 
 public class Main {
     static void main(String[] args) {
