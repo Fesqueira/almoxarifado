@@ -1,12 +1,12 @@
-package almoxarifado.ui;
+package com.almoxarifado.ui;
 
 import java.math.BigDecimal;
 import java.sql.SQLOutput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import almoxarifado.model.Product;
-import almoxarifado.service.ProductService;
+import com.almoxarifado.model.Product;
+import com.almoxarifado.service.ProductService;
 
 public class ConsoleUI {
     private final Scanner scanner;

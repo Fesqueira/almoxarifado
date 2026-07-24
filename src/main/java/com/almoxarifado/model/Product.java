@@ -1,4 +1,4 @@
-package almoxarifado.model;
+package com.almoxarifado.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.math.BigDecimal;
@@ -13,7 +13,11 @@ public class Product {
     private int minimumStock;
     private final LocalDateTime createdAt;
 
-
+    public Product()
+    {
+        this.id = UUID.randomUUID();
+        this.createdAt = LocalDateTime.now();
+    }
     public Product(
             String name,
             String description,
@@ -57,7 +61,11 @@ public class Product {
         this.quantity -= amount;
     }
 
-    public Object getName(Product product) {
-        return product.name;
+    public String getName() {
+        return this.name;
+    }
+
+    public int getQuantity() {
+        return this.quantity;
     }
 }
