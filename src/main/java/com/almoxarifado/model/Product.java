@@ -68,4 +68,8 @@ public class Product {
     public int getQuantity() {
         return this.quantity;
     }
+
+    public BigDecimal getPurchasePrice(){ return this.purchasePrice; }
+
+    public BigDecimal getSellingPrice(){ return this.sellingPrice; }
 }

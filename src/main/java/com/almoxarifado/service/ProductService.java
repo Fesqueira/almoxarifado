@@ -6,9 +6,12 @@ import com.almoxarifado.model.Product;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.StringBuilder;
+import java.lang.Object;
 
 public class ProductService {
     private final List<Product> products;
+    StringBuilder stringBuilder = new StringBuilder();
 
     public ProductService (){
         this.products = new ArrayList<>();
@@ -47,9 +50,14 @@ public class ProductService {
     public void listProducts(){
         int arraySize = products.size();
 
-        System.out.println("A lista atualmente possui " + arraySize + " produtos. Lista abaixo:");
+        System.out.println(String.format("A lista atualmente possui %d intens:", arraySize));
 
-        for (int i = 0; i < arraySize; i++){ System.out.println(products.get(i).getName()); }
+        for (int i = 0; i < arraySize; i++){
+            String listOfItems = String.valueOf(stringBuilder.append(products.get(i).getName())
+                                              .append(" ::::: Preço: ")
+                                              .append(products.get(i).getSellingPrice()));
+            System.out.println(listOfItems);
+        }
     }
 
 }
