@@ -44,5 +44,12 @@ public class ProductService {
         }
     }
 
+    public void listProducts(){
+        int arraySize = products.size();
+
+        System.out.println("A lista atualmente possui " + arraySize + " produtos. Lista abaixo:");
+
+        for (int i = 0; i < arraySize; i++){ System.out.println(products.get(i).getName()); }
+    }
 
 }
