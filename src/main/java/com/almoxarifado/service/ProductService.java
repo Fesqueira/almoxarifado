@@ -12,10 +12,15 @@ import java.lang.Object;
 public class ProductService {
     private final List<Product> products;
     StringBuilder stringBuilder = new StringBuilder();
+    int arraySize;
+
 
     public ProductService (){
         this.products = new ArrayList<>();
 
+    }
+    public List<Product> getProducts() {
+        return products;
     }
 
     public boolean verifyExists(Product product, String name){
@@ -47,16 +52,39 @@ public class ProductService {
         }
     }
 
-    public void listProducts(){
-        int arraySize = products.size();
+    public void listProducts(String type){
+        if ("add".equals(type)){
+            System.out.println("Escreva o nome do produto que deseja incrementar.");
+        }
+        else{
+            System.out.printf(
+                 "A lista atualmente possui %d itens.%n",
+                    products.size());
+        }
+        String listOfItems;
+        for (Product product : products){
 
-        System.out.println(String.format("A lista atualmente possui %d intens:", arraySize));
+            StringBuilder sb = new StringBuilder();
+            sb.append(product.getName())
+               .append(" ::::: Quantidade: ")
+               .append(product.getQuantity())
+               .append(" ::::: Preço: ")
+               .append(product.getSellingPrice());
 
+            System.out.println(sb);
+        }
+
+    }
+
+
+
+    public void increaseAmount(String name, int amount) {
+        arraySize = products.size();
         for (int i = 0; i < arraySize; i++){
-            String listOfItems = String.valueOf(stringBuilder.append(products.get(i).getName())
-                                              .append(" ::::: Preço: ")
-                                              .append(products.get(i).getSellingPrice()));
-            System.out.println(listOfItems);
+            if (products.get(i).getName().equalsIgnoreCase(name)){
+                products.get(i).addStock(amount);
+                break;
+            }
         }
     }
 

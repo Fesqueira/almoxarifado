@@ -27,7 +27,11 @@ public class ConsoleUI {
                 case 1:
                     this.registrationScreen();
                     break;
+                case 2:
+                    this.productListUi();
+                    break;
                 case 0:
+                    System.out.println("Saindo do programa...");
                     running = false;
                     break;
             }
@@ -39,8 +43,10 @@ public class ConsoleUI {
     public void showMenu(){
         System.out.println("############## MENU ##############");
         System.out.println();
-        System.out.println("1- Registrar novo produto.");
+        System.out.println("1 - Registrar novo produto.");
+        System.out.println("2 - Exibir lista de produtos.");
         System.out.println("0 - Sair");
+
     }
 
     public int readOption(){
@@ -91,6 +97,17 @@ public class ConsoleUI {
 
 
 
+    }
+
+    public void productListUi(){ productService.listProducts("normal"); }
+
+    public void increaseQuantityUi() {
+        productService.listProducts("add");
+        String toAdd = scanner.nextLine();
+        System.out.println("Quantas unidades você quer aumentar no estoque? ");
+        int quantity = Integer.parseInt(scanner.nextLine());
+        productService.increaseAmount(toAdd,quantity);
+        System.out.println("Estoque incrementado com sucesso!");
     }
 }
 
