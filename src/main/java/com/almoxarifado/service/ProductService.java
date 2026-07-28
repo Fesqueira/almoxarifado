@@ -44,24 +44,16 @@ public class ProductService {
                 quantity,
                 minimumStock);
 
-        if  (products.stream().map(Product::getName).noneMatch(name::equals)) {
+        if  (products.stream().map(Product::getName).noneMatch(name::equals) && !name.isBlank()) {
             this.products.add(product);
         }
-        else{
-            System.out.println("O produto que você está tentando registrar já existe!");
-        }
+        else if (name.isBlank()) {
+            System.out.println("Por favor, insira um nome válido!");
+
+        } else{ System.out.println("O produto que você está tentando registrar já existe!"); }
     }
 
-    public void listProducts(String type){
-        if ("add".equals(type)){
-            System.out.println("Escreva o nome do produto que deseja incrementar.");
-        }
-        else{
-            System.out.printf(
-                 "A lista atualmente possui %d itens.%n",
-                    products.size());
-        }
-        String listOfItems;
+    public void listProducts(){
         for (Product product : products){
 
             StringBuilder sb = new StringBuilder();

@@ -99,10 +99,14 @@ public class ConsoleUI {
 
     }
 
-    public void productListUi(){ productService.listProducts("normal"); }
+    public void productListUi(){
+        System.out.printf("Você atualmente possui %d itens em estoque:%n", productService.getProducts().size());
+        productService.listProducts();
+    }
 
     public void increaseQuantityUi() {
-        productService.listProducts("add");
+        System.out.println("Escreva o nome do item que você deseja incrementar no estoque:");
+        productService.listProducts();
         String toAdd = scanner.nextLine();
         System.out.println("Quantas unidades você quer aumentar no estoque? ");
         int quantity = Integer.parseInt(scanner.nextLine());

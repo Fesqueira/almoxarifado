@@ -2,13 +2,18 @@ package com.almoxarifado.service;
 
 import com.almoxarifado.model.Product;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ProductServiceTest {
+
+class ProductServiceTest {
     private ProductService productService;
     private Product product;
 
@@ -26,7 +31,28 @@ public class ProductServiceTest {
                 new BigDecimal(500),
                 10,
                 2);
+        System.out.println(productService.getProducts().getFirst().getName());
+    }
 
+    @Test
+
+    void cantRegisterProduct() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        productService.registerProduct(
+                "   ",
+                "Descrição qualquer",
+                new BigDecimal("100.00"),
+                new BigDecimal("150.00"),
+                5,
+                1
+        );
+
+        System.setOut(System.out);
+
+        assertEquals(0, productService.getProducts().size());
+        assertTrue(outContent.toString().contains("Por favor, insira um nome válido!"));
     }
 
     @Test
@@ -50,7 +76,7 @@ public class ProductServiceTest {
                 10,
                 2);
 
-        productService.listProducts("normal");
+        productService.listProducts();
 
     }
 
