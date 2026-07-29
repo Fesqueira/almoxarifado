@@ -1,8 +1,11 @@
 package com.almoxarifado.ui;
 
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import com.almoxarifado.model.Product;
@@ -27,8 +30,15 @@ public class ConsoleUI {
                 case 1:
                     this.registrationScreen();
                     break;
+                case 2:
+                    this.productListUi();
+                    break;
                 case 0:
+                    System.out.println("Saindo do programa...");
                     running = false;
+                    break;
+                default:
+                    System.out.println("Insira um número correspondente a uma opção válida!");
                     break;
             }
 
@@ -39,8 +49,10 @@ public class ConsoleUI {
     public void showMenu(){
         System.out.println("############## MENU ##############");
         System.out.println();
-        System.out.println("1- Registrar novo produto.");
+        System.out.println("1 - Registrar novo produto.");
+        System.out.println("2 - Exibir lista de produtos.");
         System.out.println("0 - Sair");
+
     }
 
     public int readOption(){
@@ -91,6 +103,36 @@ public class ConsoleUI {
 
 
 
+    }
+
+    public void listProducts(){
+        for (Product product : productService.getProducts()){
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(product.getName())
+                    .append(" ::::: Quantidade: ")
+                    .append(product.getQuantity())
+                    .append(" ::::: Preço: ")
+                    .append(product.getSellingPrice());
+
+            System.out.println(sb);
+        }
+
+    }
+
+    public void productListUi(){
+        System.out.printf("Você atualmente possui %d itens em estoque:%n", productService.getProducts().size());
+        listProducts();
+    }
+
+    public void increaseQuantityUi() {
+        System.out.println("Escreva o nome do item que você deseja incrementar no estoque:");
+        listProducts();
+        String toAdd = scanner.nextLine();
+        System.out.println("Quantas unidades você quer aumentar no estoque? ");
+        int quantity = Integer.parseInt(scanner.nextLine());
+        productService.increaseAmount(toAdd,quantity);
+        System.out.println("Estoque incrementado com sucesso!");
     }
 }
 

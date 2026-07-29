@@ -1,5 +1,7 @@
 package com.almoxarifado.model;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 import java.math.BigDecimal;
 
@@ -68,4 +70,12 @@ public class Product {
     public int getQuantity() {
         return this.quantity;
     }
+
+    public BigDecimal getPurchasePrice(){ return this.purchasePrice; }
+
+    public BigDecimal getSellingPrice(){ return this.sellingPrice; }
+
+    public UUID getId() { return id; }
+
+    public LocalDateTime getCreatedAt(){ return createdAt; }
 }
