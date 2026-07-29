@@ -53,22 +53,6 @@ public class ProductService {
         } else{ System.out.println("O produto que você está tentando registrar já existe!"); }
     }
 
-    public void listProducts(){
-        for (Product product : products){
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(product.getName())
-               .append(" ::::: Quantidade: ")
-               .append(product.getQuantity())
-               .append(" ::::: Preço: ")
-               .append(product.getSellingPrice());
-
-            System.out.println(sb);
-        }
-
-    }
-
-
 
     public void increaseAmount(String name, int amount) {
         arraySize = products.size();

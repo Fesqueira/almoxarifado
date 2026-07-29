@@ -1,8 +1,11 @@
 package com.almoxarifado.ui;
 
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import com.almoxarifado.model.Product;
@@ -33,6 +36,9 @@ public class ConsoleUI {
                 case 0:
                     System.out.println("Saindo do programa...");
                     running = false;
+                    break;
+                default:
+                    System.out.println("Insira um número correspondente a uma opção válida!");
                     break;
             }
 
@@ -99,14 +105,29 @@ public class ConsoleUI {
 
     }
 
+    public void listProducts(){
+        for (Product product : productService.getProducts()){
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(product.getName())
+                    .append(" ::::: Quantidade: ")
+                    .append(product.getQuantity())
+                    .append(" ::::: Preço: ")
+                    .append(product.getSellingPrice());
+
+            System.out.println(sb);
+        }
+
+    }
+
     public void productListUi(){
         System.out.printf("Você atualmente possui %d itens em estoque:%n", productService.getProducts().size());
-        productService.listProducts();
+        listProducts();
     }
 
     public void increaseQuantityUi() {
         System.out.println("Escreva o nome do item que você deseja incrementar no estoque:");
-        productService.listProducts();
+        listProducts();
         String toAdd = scanner.nextLine();
         System.out.println("Quantas unidades você quer aumentar no estoque? ");
         int quantity = Integer.parseInt(scanner.nextLine());
