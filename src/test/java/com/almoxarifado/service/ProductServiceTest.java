@@ -30,12 +30,12 @@ class ProductServiceTest {
     void canRegisterProduct() {
 
         productService.registerProduct("Keyboard",
-                "Keybord",
+                "Keyboard",
                 new BigDecimal(300),
                 new BigDecimal(500),
                 10,
                 2);
-        System.out.println(productService.getProducts().getFirst().getName());
+        assertEquals("Keyboard", productService.getProducts().getFirst().getName());
     }
 
     @Test
