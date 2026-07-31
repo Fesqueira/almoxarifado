@@ -77,6 +77,20 @@ class ProductServiceTest {
 
 
     }
+    @Test
+    void canDecreaseAmount(){
+        productService.registerProduct("Mouse",
+                "Mouse Gamer",
+                new BigDecimal("50.00"),
+                new BigDecimal("80.00"),
+                10,
+                2);
+        productService.decreaseAmount("Mouse", 3);
+
+        Product product = productService.getProducts().getFirst();
+
+        assertEquals(7, product.getQuantity());
+    }
 
     //TODO add Unit Tests for ProductService class
 }

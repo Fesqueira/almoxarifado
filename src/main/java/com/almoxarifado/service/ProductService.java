@@ -64,4 +64,13 @@ public class ProductService {
         }
     }
 
+    public void decreaseAmount(String name, int amount){
+        arraySize = products.size();
+        for (int i = 0; i < arraySize; i++){
+            if (products.get(i).getName().equalsIgnoreCase(name)){
+                products.get(i).removeStock(amount);
+                break;
+            }
+        }
+    }
 }
