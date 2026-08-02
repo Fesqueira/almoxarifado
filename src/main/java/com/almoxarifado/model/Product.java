@@ -67,6 +67,8 @@ public class Product {
         return this.name;
     }
 
+    public String getDescription() { return this.description; }
+
     public int getQuantity() {
         return this.quantity;
     }
@@ -74,6 +76,8 @@ public class Product {
     public BigDecimal getPurchasePrice(){ return this.purchasePrice; }
 
     public BigDecimal getSellingPrice(){ return this.sellingPrice; }
+
+    public int getMinimumStock() { return this.minimumStock; }
 
     public UUID getId() { return id; }
 
