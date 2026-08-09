@@ -1,15 +1,15 @@
 package com.almoxarifado;
 
-import com.almoxarifado.database.postgres.ProductDaoPostgres;
+import com.almoxarifado.database.sqlite.ProductDaoSQLite;
 import com.almoxarifado.service.ProductService;
 import com.almoxarifado.ui.ProductGUI;
 
 import javax.swing.SwingUtilities;
 
 
-public class Main {
+public class MainLocal {
     public static void main(String[] args) throws Exception {
-        ProductDaoPostgres productDao = new ProductDaoPostgres();
+        ProductDaoSQLite productDao = new ProductDaoSQLite();
         productDao.createSchemaIfNotExists();
 
         ProductService productService = new ProductService(productDao);

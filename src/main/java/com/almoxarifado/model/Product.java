@@ -39,6 +39,26 @@ public class Product {
         this.minimumStock = minimumStock;
     }
 
+    public Product(
+            UUID id,
+            String name,
+            String description,
+            BigDecimal purchasePrice,
+            BigDecimal sellingPrice,
+            int quantity,
+            int minimumStock,
+            LocalDateTime createdAt
+    ) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.purchasePrice = purchasePrice;
+        this.sellingPrice = sellingPrice;
+        this.quantity = quantity;
+        this.minimumStock = minimumStock;
+        this.createdAt = createdAt;
+    }
+
 
     public void addStock(int amount) {
         if (amount <= 0) {

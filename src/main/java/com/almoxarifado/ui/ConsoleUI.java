@@ -1,11 +1,7 @@
 package com.almoxarifado.ui;
 
 import java.math.BigDecimal;
-import java.sql.Array;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import com.almoxarifado.model.Product;
@@ -26,25 +22,28 @@ public class ConsoleUI {
         while (running) {
             this.showMenu();
             int option = readOption();
-            switch (option) {
-                case 1:
-                    this.registrationScreen();
-                    break;
-                case 2:
-                    this.productListUi();
-                    break;
-                case 3:
-                    this.changeQuantityUi();
-                    break;
-                case 0:
-                    System.out.println("Saindo do programa...");
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Insira um número correspondente a uma opção válida!");
-                    break;
+            try {
+                switch (option) {
+                    case 1:
+                        this.registrationScreen();
+                        break;
+                    case 2:
+                        this.productListUi();
+                        break;
+                    case 3:
+                        this.changeQuantityUi();
+                        break;
+                    case 0:
+                        System.out.println("Saindo do programa...");
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Insira um número correspondente a uma opção válida!");
+                        break;
+                }
+            } catch (SQLException e) {
+                System.out.println("Erro ao acessar o banco de dados: " + e.getMessage());
             }
-
         }
 
     }
@@ -61,18 +60,20 @@ public class ConsoleUI {
 
     public int readOption() {
         String input = scanner.nextLine();
-        return Integer.parseInt(input);
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
-    public void registrationScreen() {
+    public void registrationScreen() throws SQLException {
         String name;
         String description;
         BigDecimal purchasePrice = BigDecimal.valueOf(0);
         BigDecimal sellingPrice = BigDecimal.valueOf(0);
         int quantity = 0;
         int minimumSet = 0;
-        boolean i = true;
-
 
         System.out.println("Nome do Produto: ");
         name = scanner.nextLine();
@@ -105,10 +106,9 @@ public class ConsoleUI {
 
         productService.registerProduct(name, description, purchasePrice, sellingPrice, quantity, minimumSet);
 
-
     }
 
-    public void listProducts() {
+    public void listProducts() throws SQLException {
         for (Product product : productService.getProducts()) {
 
             StringBuilder sb = new StringBuilder();
@@ -123,12 +123,12 @@ public class ConsoleUI {
 
     }
 
-    public void productListUi() {
+    public void productListUi() throws SQLException {
         System.out.printf("Você atualmente possui %d itens em estoque:%n", productService.getProducts().size());
         listProducts();
     }
 
-    public void changeQuantityUi() {
+    public void changeQuantityUi() throws SQLException {
         System.out.println("Escreva o nome do item que você deseja alterar no estoque:");
         listProducts();
         String toChange = scanner.nextLine();
@@ -137,23 +137,32 @@ public class ConsoleUI {
         switch (choice) {
             case "1":
                 System.out.println("Quantas unidades você quer aumentar no estoque? ");
-                int quantityAdd = Integer.parseInt(scanner.nextLine());
-                productService.increaseAmount(toChange, quantityAdd);
-                System.out.println("Estoque incrementado com sucesso!");
+                try {
+                    int quantityAdd = Integer.parseInt(scanner.nextLine());
+                    productService.increaseAmount(toChange, quantityAdd);
+                    System.out.println("Estoque incrementado com sucesso!");
+                } catch (NumberFormatException e) {
+                    System.out.println("Por favor, insira um número inteiro válido.");
+                } catch (IllegalArgumentException | IllegalStateException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case "2":
                 System.out.println("Quantas unidades você deseja subtrair do estoque?");
-                int quantitySub = Integer.parseInt(scanner.nextLine());
-                productService.decreaseAmount(toChange, quantitySub);
-                System.out.println("Estoque removido com sucesso!");
+                try {
+                    int quantitySub = Integer.parseInt(scanner.nextLine());
+                    productService.decreaseAmount(toChange, quantitySub);
+                    System.out.println("Estoque removido com sucesso!");
+                } catch (NumberFormatException e) {
+                    System.out.println("Por favor, insira um número inteiro válido.");
+                } catch (IllegalArgumentException | IllegalStateException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             default:
-                throw new IllegalArgumentException(
-                        "Insira apenas 1 ou 2."
-                );
+                System.out.println("Insira apenas 1 ou 2.");
+                break;
         }
 
     }
 }
-
-

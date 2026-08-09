@@ -16,6 +16,15 @@ out/
 src/main/java/com/almoxarifado/database/DBConnection.java
 idea/dataSources.xml
 
+
+# Environment variables
+.env
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
 ### Eclipse ###
 .apt_generated
 .classpath
