@@ -21,7 +21,6 @@ public class ProductDaoSQLite implements ProductRepository {
     private static final Logger LOGGER = Logger.getLogger(ProductDaoSQLite.class.getName());
 
 
-
     public void createSchemaIfNotExists() throws SQLException {
         var sql = "CREATE TABLE IF NOT EXISTS products (" +
                 "id TEXT PRIMARY KEY, " +
@@ -117,7 +116,7 @@ public class ProductDaoSQLite implements ProductRepository {
     public void deleteByName(String name) throws SQLException {
         var sql = "DELETE FROM products WHERE name = ?";
         try (Connection dbconnection = DBConnection.getConnection();
-             PreparedStatement stmt = dbconnection.prepareStatement(sql)){
+             PreparedStatement stmt = dbconnection.prepareStatement(sql)) {
             stmt.setString(1, name);
             stmt.executeUpdate();
         }

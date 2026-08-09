@@ -3,7 +3,7 @@ package com.almoxarifado.service;
 import com.almoxarifado.database.postgres.ProductDaoPostgres;
 import com.almoxarifado.database.sqlite.ProductDaoSQLite;
 import com.almoxarifado.model.Product;
-import com.almoxarifado.database.ProductRepository ;
+import com.almoxarifado.database.ProductRepository;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -83,8 +83,9 @@ public class ProductService {
         }
         return null;
     }
+
     public void deleteProduct(String name) throws SQLException {
-        if (!productRepository.existsByName(name)){
+        if (!productRepository.existsByName(name)) {
             System.out.println("Produto não encontrado");
             return;
         }

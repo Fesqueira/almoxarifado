@@ -158,7 +158,6 @@ public class ProductGUI extends JFrame {
         minimumLabel.setFont(popUpFont);
 
 
-
         // Painel
         JPanel panel = new JPanel(new GridLayout(0, 1, 8, 8));
 
@@ -252,7 +251,7 @@ public class ProductGUI extends JFrame {
         }
     }
 
-    private void deleteProductDialog(){
+    private void deleteProductDialog() {
         String title = "Remover Produto";
 
         String name = showInputDialog(
@@ -260,7 +259,7 @@ public class ProductGUI extends JFrame {
                 "Nome do Produto:"
         );
 
-        if (name == null || name.isBlank()){
+        if (name == null || name.isBlank()) {
             return;
         }
         try {
@@ -269,10 +268,9 @@ public class ProductGUI extends JFrame {
 
         } catch (SQLException e) {
             showError("Erro ao incluir produto: " + e.getMessage());
-        } catch (IllegalArgumentException | IllegalStateException e){
+        } catch (IllegalArgumentException | IllegalStateException e) {
             showError(e.getMessage());
         }
-
 
 
     }

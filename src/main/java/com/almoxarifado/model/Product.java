@@ -1,4 +1,5 @@
 package com.almoxarifado.model;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
@@ -15,11 +16,11 @@ public class Product {
     private int minimumStock;
     private final LocalDateTime createdAt;
 
-    public Product()
-    {
+    public Product() {
         this.id = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
     }
+
     public Product(
             String name,
             String description,
@@ -87,19 +88,31 @@ public class Product {
         return this.name;
     }
 
-    public String getDescription() { return this.description; }
+    public String getDescription() {
+        return this.description;
+    }
 
     public int getQuantity() {
         return this.quantity;
     }
 
-    public BigDecimal getPurchasePrice(){ return this.purchasePrice; }
+    public BigDecimal getPurchasePrice() {
+        return this.purchasePrice;
+    }
 
-    public BigDecimal getSellingPrice(){ return this.sellingPrice; }
+    public BigDecimal getSellingPrice() {
+        return this.sellingPrice;
+    }
 
-    public int getMinimumStock() { return this.minimumStock; }
+    public int getMinimumStock() {
+        return this.minimumStock;
+    }
 
-    public UUID getId() { return id; }
+    public UUID getId() {
+        return id;
+    }
 
-    public LocalDateTime getCreatedAt(){ return createdAt; }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

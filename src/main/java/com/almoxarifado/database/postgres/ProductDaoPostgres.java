@@ -109,10 +109,11 @@ public class ProductDaoPostgres implements ProductRepository {
             stmt.executeUpdate();
         }
     }
+
     public void deleteByName(String name) throws SQLException {
         var sql = "DELETE FROM products WHERE name = ?";
         try (Connection dbconnection = com.almoxarifado.database.sqlite.DBConnection.getConnection();
-             PreparedStatement stmt = dbconnection.prepareStatement(sql)){
+             PreparedStatement stmt = dbconnection.prepareStatement(sql)) {
             stmt.setString(1, name);
             stmt.executeUpdate();
         }
