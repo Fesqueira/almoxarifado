@@ -1,4 +1,5 @@
 package com.almoxarifado.model;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Locale;
@@ -15,11 +16,11 @@ public class Product {
     private int minimumStock;
     private final LocalDateTime createdAt;
 
-    public Product()
-    {
+    public Product() {
         this.id = UUID.randomUUID();
         this.createdAt = LocalDateTime.now();
     }
+
     public Product(
             String name,
             String description,
@@ -37,6 +38,26 @@ public class Product {
         this.sellingPrice = sellingPrice;
         this.quantity = quantity;
         this.minimumStock = minimumStock;
+    }
+
+    public Product(
+            UUID id,
+            String name,
+            String description,
+            BigDecimal purchasePrice,
+            BigDecimal sellingPrice,
+            int quantity,
+            int minimumStock,
+            LocalDateTime createdAt
+    ) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.purchasePrice = purchasePrice;
+        this.sellingPrice = sellingPrice;
+        this.quantity = quantity;
+        this.minimumStock = minimumStock;
+        this.createdAt = createdAt;
     }
 
 
@@ -67,15 +88,31 @@ public class Product {
         return this.name;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
     public int getQuantity() {
         return this.quantity;
     }
 
-    public BigDecimal getPurchasePrice(){ return this.purchasePrice; }
+    public BigDecimal getPurchasePrice() {
+        return this.purchasePrice;
+    }
 
-    public BigDecimal getSellingPrice(){ return this.sellingPrice; }
+    public BigDecimal getSellingPrice() {
+        return this.sellingPrice;
+    }
 
-    public UUID getId() { return id; }
+    public int getMinimumStock() {
+        return this.minimumStock;
+    }
 
-    public LocalDateTime getCreatedAt(){ return createdAt; }
+    public UUID getId() {
+        return id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

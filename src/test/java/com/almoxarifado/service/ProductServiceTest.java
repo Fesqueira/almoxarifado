@@ -1,82 +1,150 @@
 package com.almoxarifado.service;
 
+import com.almoxarifado.database.ProductRepository;
 import com.almoxarifado.model.Product;
-import com.almoxarifado.ui.ConsoleUI;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-
+@ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
+
+    @Mock
+    private ProductRepository productRepository;
+
     private ProductService productService;
-    private ConsoleUI consoleUI;
-    private Product product;
 
     @BeforeEach
-    void setup() {
-        productService = new ProductService();
-        consoleUI = new ConsoleUI(productService);
+    void setUp() {
+        productService = new ProductService(productRepository);
     }
 
-
-    @Test
-    void canRegisterProduct() {
-
-        productService.registerProduct("Keyboard",
-                "Keybord",
-                new BigDecimal(300),
-                new BigDecimal(500),
-                10,
-                2);
-        System.out.println(productService.getProducts().getFirst().getName());
+    private Product buildProduct(String name, int quantity) {
+        return new Product(
+                UUID.randomUUID(), name, "Descrição",
+                BigDecimal.valueOf(5), BigDecimal.valueOf(10),
+                quantity, 2, LocalDateTime.now());
     }
 
-    @Test
+    // ---------- registerProduct ----------
 
-    void cantRegisterProduct() {
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+    @Test
+    void registerProductComNomeValidoESemDuplicataSalvaProduto() throws SQLException {
+        when(productRepository.existsByName("Chave de Fenda")).thenReturn(false);
 
         productService.registerProduct(
-                "   ",
-                "Descrição qualquer",
-                new BigDecimal("100.00"),
-                new BigDecimal("150.00"),
-                5,
-                1
-        );
+                "Chave de Fenda", "Chave Phillips", BigDecimal.valueOf(3), BigDecimal.valueOf(8), 20, 5);
 
-        System.setOut(System.out);
-
-        assertEquals(0, productService.getProducts().size());
-        assertTrue(outContent.toString().contains("Por favor, insira um nome válido!"));
+        ArgumentCaptor<Product> captor = ArgumentCaptor.forClass(Product.class);
+        verify(productRepository).save(captor.capture());
+        assertEquals("Chave de Fenda", captor.getValue().getName());
     }
 
     @Test
-    void canIncreaseAmount() {
-        productService.registerProduct("Mouse",
-                "Mouse Gamer",
-                new BigDecimal("50.00"),
-                new BigDecimal("80.00"),
-                10,
-                2);
+    void registerProductComNomeEmBrancoNaoSalva() throws SQLException {
+        productService.registerProduct("   ", "Descrição", BigDecimal.ONE, BigDecimal.TEN, 1, 1);
 
-        productService.increaseAmount("mouse", 5);
-
-        Product product = productService.getProducts().getFirst();
-
-        assertEquals(15, product.getQuantity());
-
-
-
+        verify(productRepository, never()).save(any());
     }
 
-    //TODO add Unit Tests for ProductService class
+    @Test
+    void registerProductComNomeJaExistenteNaoSalva() throws SQLException {
+        when(productRepository.existsByName("Martelo")).thenReturn(true);
+
+        productService.registerProduct("Martelo", "Descrição", BigDecimal.ONE, BigDecimal.TEN, 1, 1);
+
+        verify(productRepository, never()).save(any());
+    }
+
+    // ---------- verifyExists ----------
+
+    @Test
+    void verifyExistsDelegaParaORepositorio() throws SQLException {
+        when(productRepository.existsByName("Serrote")).thenReturn(true);
+
+        assertTrue(productService.verifyExists("Serrote"));
+        verify(productRepository).existsByName("Serrote");
+    }
+
+    // ---------- increaseAmount ----------
+
+    @Test
+    void increaseAmountAtualizaQuantidadeQuandoProdutoExiste() throws SQLException {
+        Product product = buildProduct("Furadeira", 10);
+        when(productRepository.findAll()).thenReturn(List.of(product));
+
+        productService.increaseAmount("Furadeira", 5);
+
+        verify(productRepository).updateQuantity("Furadeira", 15);
+    }
+
+    @Test
+    void increaseAmountEhCaseInsensitive() throws SQLException {
+        Product product = buildProduct("Furadeira", 10);
+        when(productRepository.findAll()).thenReturn(List.of(product));
+
+        productService.increaseAmount("furadeira", 5);
+
+        verify(productRepository).updateQuantity("Furadeira", 15);
+    }
+
+    @Test
+    void increaseAmountComProdutoInexistenteNaoChamaUpdate() throws SQLException {
+        when(productRepository.findAll()).thenReturn(List.of());
+
+        productService.increaseAmount("Não Existe", 5);
+
+        verify(productRepository, never()).updateQuantity(anyString(), org.mockito.ArgumentMatchers.anyInt());
+    }
+
+    // ---------- decreaseAmount ----------
+
+    @Test
+    void decreaseAmountAtualizaQuantidadeQuandoProdutoExiste() throws SQLException {
+        Product product = buildProduct("Alicate", 10);
+        when(productRepository.findAll()).thenReturn(List.of(product));
+
+        productService.decreaseAmount("Alicate", 4);
+
+        verify(productRepository).updateQuantity("Alicate", 6);
+    }
+
+    @Test
+    void decreaseAmountMaiorQueEstoqueLancaExcecaoENaoAtualiza() throws SQLException {
+        Product product = buildProduct("Alicate", 3);
+        when(productRepository.findAll()).thenReturn(List.of(product));
+
+        // Product.removeStock recusa remover mais do que há em estoque
+        org.junit.jupiter.api.Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> productService.decreaseAmount("Alicate", 10));
+
+        verify(productRepository, never()).updateQuantity(anyString(), org.mockito.ArgumentMatchers.anyInt());
+    }
+
+    @Test
+    void decreaseAmountComProdutoInexistenteNaoChamaUpdate() throws SQLException {
+        when(productRepository.findAll()).thenReturn(List.of());
+
+        productService.decreaseAmount("Não Existe", 1);
+
+        verify(productRepository, never()).updateQuantity(anyString(), org.mockito.ArgumentMatchers.anyInt());
+    }
 }
