@@ -4,6 +4,7 @@ import com.almoxarifado.model.Product;
 import com.almoxarifado.service.ProductService;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ public class ProductGUI extends JFrame {
         this.table = new JTable(tableModel);
         this.table.setFont(new Font("SansSerif", Font.PLAIN, 20));
         this.table.setRowHeight(35);
+        configureTableRenderer();
 
         this.table.getTableHeader().setFont(
                 new Font("SansSerif", Font.BOLD, 20)
@@ -41,6 +43,8 @@ public class ProductGUI extends JFrame {
 
         buildLayout();
         refreshTable();
+
+
 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -90,6 +94,31 @@ public class ProductGUI extends JFrame {
 
 
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+    private void configureTableRenderer() {
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+
+            @Override
+            public Component getTableCellRendererComponent(
+                    JTable table,
+                    Object value,
+                    boolean isSelected,
+                    boolean hasFocus,
+                    int row,
+                    int column
+            ) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                int quantity = Integer.parseInt(table.getValueAt(row, 4).toString());
+                int minimumStock = Integer.parseInt(table.getValueAt(row, 5).toString());
+
+                if (quantity <= minimumStock) {
+                    component.setForeground(Color.RED);
+                } else {
+                    component.setForeground(Color.BLACK);
+                }
+                return component;
+            }
+        });
     }
 
     private void refreshTable() {
