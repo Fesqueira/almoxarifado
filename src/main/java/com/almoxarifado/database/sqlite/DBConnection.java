@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-public final class DBConnection {
+public final class  DBConnection {
 
     private static final String DEFAULT_FILE =
             System.getProperty("user.home") + File.separator + ".almoxarifado"

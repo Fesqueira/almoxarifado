@@ -4,6 +4,7 @@ import com.almoxarifado.model.Product;
 
 import com.almoxarifado.database.ProductRepository;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
