@@ -1,0 +1,138 @@
+package com.almoxarifado.database;
+
+import com.almoxarifado.model.Product;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+public abstract class DataClass {
+
+    protected abstract Connection getConnection() throws SQLException;
+
+
+    public void save(Product product) throws SQLException {
+
+        String sql = """
+                INSERT INTO products
+                (id, name, description, purchase_price, selling_price,
+                 quantity, minimum_stock, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """;
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setObject(1, product.getId());
+            statement.setString(2, product.getName());
+            statement.setString(3, product.getDescription());
+            statement.setBigDecimal(4, product.getPurchasePrice());
+            statement.setBigDecimal(5, product.getSellingPrice());
+            statement.setInt(6, product.getQuantity());
+            statement.setInt(7, product.getMinimumStock());
+            statement.setTimestamp(
+                    8,
+                    Timestamp.valueOf(product.getCreatedAt())
+            );
+
+            statement.executeUpdate();
+        }
+    }
+
+    public boolean existsByName(String name) throws SQLException {
+
+        String sql = """
+                SELECT 1
+                FROM products
+                WHERE name = ?
+                LIMIT 1
+                """;
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+        }
+    }
+
+    public List<Product> findAll() throws SQLException {
+
+        String sql = """
+                SELECT id, name, description, purchase_price,
+                       selling_price, quantity, minimum_stock, created_at
+                FROM products
+                """;
+
+        List<Product> products = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                Product product = new Product(
+                        getUUID(resultSet, "id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("description"),
+                        resultSet.getBigDecimal("purchase_price"),
+                        resultSet.getBigDecimal("selling_price"),
+                        resultSet.getInt("quantity"),
+                        resultSet.getInt("minimum_stock"),
+                        getCreatedAt(resultSet)
+                );
+
+                products.add(product);
+            }
+        }
+
+        return products;
+    }
+
+    public void updateQuantity(String name, int newQuantity)
+            throws SQLException {
+
+        String sql = """
+                UPDATE products
+                SET quantity = ?
+                WHERE name = ?
+                """;
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, newQuantity);
+            statement.setString(2, name);
+
+            statement.executeUpdate();
+        }
+    }
+
+    public void deleteByName(String name) throws SQLException {
+
+        String sql = """
+                DELETE FROM products
+                WHERE name = ?
+                """;
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, name);
+
+            statement.executeUpdate();
+        }
+    }
+
+    protected abstract UUID getUUID(ResultSet resultSet, String column)
+        throws SQLException;
+
+    protected abstract LocalDateTime getCreatedAt(ResultSet resultSet)
+            throws SQLException;
+}
