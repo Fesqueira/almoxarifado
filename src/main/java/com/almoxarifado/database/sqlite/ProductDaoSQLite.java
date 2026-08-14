@@ -1,6 +1,6 @@
 package com.almoxarifado.database.sqlite;
 
-import com.almoxarifado.database.DataClass;
+import com.almoxarifado.database.AbstractProductDao;
 import com.almoxarifado.database.ProductRepository;
 
 import java.sql.*;
@@ -10,7 +10,7 @@ import java.time.ZoneId;
 import java.util.UUID;
 
 
-public class ProductDaoSQLite extends DataClass implements ProductRepository {
+public class ProductDaoSQLite extends AbstractProductDao{
 
     @Override
     protected Connection getConnection() throws SQLException {

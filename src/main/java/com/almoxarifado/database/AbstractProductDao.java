@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class DataClass {
+public abstract class AbstractProductDao implements ProductRepository{
 
     protected abstract Connection getConnection() throws SQLException;
 

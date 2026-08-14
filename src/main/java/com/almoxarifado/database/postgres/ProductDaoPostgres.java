@@ -8,11 +8,11 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.almoxarifado.database.DataClass;
+import com.almoxarifado.database.AbstractProductDao;
 import com.almoxarifado.database.ProductRepository;
 
 
-public class ProductDaoPostgres extends DataClass implements ProductRepository {
+public class ProductDaoPostgres extends AbstractProductDao {
 
     @Override
     protected Connection getConnection() throws SQLException {
