@@ -44,8 +44,8 @@ public class ProductGUI extends JFrame {
 
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 800);
-        setMinimumSize(new Dimension(1024, 720));
+        setSize(800, 620);
+        setMinimumSize(new Dimension(800, 620));
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -69,11 +69,11 @@ public class ProductGUI extends JFrame {
         deleteButton.addActionListener(e -> deleteProductDialog());
         refreshButton.addActionListener(e -> refreshTable());
 
-        registerButton.setPreferredSize(new Dimension(500, 100));
-        increaseButton.setPreferredSize(new Dimension(500, 100));
-        decreaseButton.setPreferredSize(new Dimension(500, 100));
-        refreshButton.setPreferredSize(new Dimension(500, 100));
-        deleteButton.setPreferredSize(new Dimension(500, 100));
+        registerButton.setPreferredSize(new Dimension(300, 100));
+        increaseButton.setPreferredSize(new Dimension(300, 100));
+        decreaseButton.setPreferredSize(new Dimension(300, 100));
+        refreshButton.setPreferredSize(new Dimension(300, 100));
+        deleteButton.setPreferredSize(new Dimension(300, 100));
 
 
         deleteButton.setFont(buttonFont);
